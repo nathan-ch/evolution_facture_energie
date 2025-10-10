@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Évolution facture énergétique</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Évolution d'une facture énergétique</h1>
+
+      <section class="card">
+        <form id="energy-form">
+          <div class="rows-header">
+            <div>Consommations</div>
+            <button type="button" id="add-row">Ajouter une ligne</button>
+          </div>
+          <div id="rows" class="rows"></div>
+
+          <div class="grid mt">
+            <label>
+              Année de départ
+              <input id="start-year" name="startYear" type="number" min="2000" max="2100" value="2025" required />
+            </label>
+
+            <label>
+              Nombre d'années
+              <input id="years" name="years" type="number" min="1" max="50" value="10" required />
+            </label>
+          </div>
+
+          <details class="mt">
+            <summary>Inflation par type d'énergie</summary>
+            <div class="grid mt">
+              <label>
+                Électricité (%/an)
+                <input id="esc-electricite" type="number" min="-50" max="100" step="0.1" placeholder="ex: 4" />
+              </label>
+              <label>
+                Gaz naturel (%/an)
+                <input id="esc-gaz" type="number" min="-50" max="100" step="0.1" placeholder="ex: 3" />
+              </label>
+              <label>
+                Fioul (%/an)
+                <input id="esc-fioul" type="number" min="-50" max="100" step="0.1" placeholder="ex: 3.5" />
+              </label>
+              <label>
+                Granulé (%/an)
+                <input id="esc-granule" type="number" min="-50" max="100" step="0.1" placeholder="ex: 2.5" />
+              </label>
+              <label>
+                Plaquette (%/an)
+                <input id="esc-plaquette" type="number" min="-50" max="100" step="0.1" placeholder="ex: 2" />
+              </label>
+              <label>
+                Propane (%/an)
+                <input id="esc-propane" type="number" min="-50" max="100" step="0.1" placeholder="ex: 3.2" />
+              </label>
+            </div>
+          </details>
+
+          <div class="actions">
+            <button type="submit">Calculer</button>
+            <button type="button" id="export-csv" disabled>Exporter CSV</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" id="results-section" hidden>
+        <p>Evolution de la facture énergétique</p>
+        <!-- Nouvelles cartes au-dessus du graphique -->
+        <div class="stats-row">
+          <aside class="stat-card" id="price0-card" aria-live="polite">
+            <div class="stat-label">Prix année 1</div>
+            <div class="stat-value" id="price0-value">—</div>
+            <div class="stat-sub" id="price0-sub">—</div>
+          </aside>
+          <aside class="stat-card" id="pricex-card" aria-live="polite">
+            <div class="stat-label">Prix année finale</div>
+            <div class="stat-value" id="pricex-value">—</div>
+            <div class="stat-sub" id="pricex-sub">—</div>
+          </aside>
+          <aside class="stat-card accent-blue" id="factor-card" aria-live="polite">
+            <div class="stat-label">Facteur ×</div>
+            <div class="stat-value" id="factor-value">—</div>
+            <div class="stat-sub" id="factor-sub">—</div>
+          </aside>
+          <aside class="stat-card accent-blue" id="surplus-card" aria-live="polite">
+            <div class="stat-label">Surplus cumulé</div>
+            <div class="stat-value" id="surplus-value">—</div>
+            <div class="stat-sub" id="surplus-sub">—</div>
+          </aside>
+        </div>
+
+        <!-- Graphique en dessous -->
+        <div class="chart-wrapper" id="chart-wrapper">
+          <svg id="results-chart" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet"></svg>
+          <div id="chart-legend" class="chart-legend"></div>
+        </div>
+        <div class="table-wrapper">
+          <table id="results-table">
+            <thead>
+              <tr>
+                <th>Année</th>
+                <th>Facture totale (€)</th>
+                <th>Détail par ligne</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer>
+        <p>
+          Outil local, aucune donnée n'est envoyée.
+        </p>
+        <p>Par <a href="mailto:chateaunathan@proton.me">Nathan Chateau</a></p>
+      </footer>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+  </html>
+
+
