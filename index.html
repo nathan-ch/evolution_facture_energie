@@ -10,101 +10,196 @@
     <main class="container">
       <h1>Évolution d'une facture énergétique</h1>
 
+      <!-- Section Consommation de base -->
       <section class="card">
+        <h2>Consommation de base</h2>
         <form id="energy-form">
           <div class="rows-header">
             <div>Consommations</div>
             <button type="button" id="add-row">Ajouter une ligne</button>
           </div>
           <div id="rows" class="rows"></div>
-
-          <div class="grid mt">
-            <label>
-              Année de départ
-              <input id="start-year" name="startYear" type="number" min="2000" max="2100" value="2025" required />
-            </label>
-
-            <label>
-              Nombre d'années
-              <input id="years" name="years" type="number" min="1" max="50" value="10" required />
-            </label>
-          </div>
-
-          <details class="mt">
-            <summary>Inflation par type d'énergie</summary>
-            <div class="grid mt">
-              <label>
-                Électricité (%/an)
-                <input id="esc-electricite" type="number" min="-50" max="100" step="0.1" placeholder="ex: 4" />
-              </label>
-              <label>
-                Gaz naturel (%/an)
-                <input id="esc-gaz" type="number" min="-50" max="100" step="0.1" placeholder="ex: 3" />
-              </label>
-              <label>
-                Fioul (%/an)
-                <input id="esc-fioul" type="number" min="-50" max="100" step="0.1" placeholder="ex: 3.5" />
-              </label>
-              <label>
-                Granulé (%/an)
-                <input id="esc-granule" type="number" min="-50" max="100" step="0.1" placeholder="ex: 2.5" />
-              </label>
-              <label>
-                Plaquette (%/an)
-                <input id="esc-plaquette" type="number" min="-50" max="100" step="0.1" placeholder="ex: 2" />
-              </label>
-              <label>
-                Propane (%/an)
-                <input id="esc-propane" type="number" min="-50" max="100" step="0.1" placeholder="ex: 3.2" />
-              </label>
-            </div>
-          </details>
-
-          <div class="actions">
-            <button type="submit">Calculer</button>
-            <button type="button" id="export-csv" disabled>Exporter CSV</button>
-          </div>
         </form>
       </section>
 
-      <section class="card" id="results-section" hidden>
-        <p>Evolution de la facture énergétique</p>
-        <!-- Nouvelles cartes au-dessus du graphique -->
-        <div class="stats-row">
-          <aside class="stat-card" id="price0-card" aria-live="polite">
-            <div class="stat-label">Prix année 1</div>
-            <div class="stat-value" id="price0-value">—</div>
-            <div class="stat-sub" id="price0-sub">—</div>
-          </aside>
-          <aside class="stat-card" id="pricex-card" aria-live="polite">
-            <div class="stat-label">Prix année finale</div>
-            <div class="stat-value" id="pricex-value">—</div>
-            <div class="stat-sub" id="pricex-sub">—</div>
-          </aside>
-          <aside class="stat-card accent-blue" id="factor-card" aria-live="polite">
-            <div class="stat-label">Facteur ×</div>
-            <div class="stat-value" id="factor-value">—</div>
-            <div class="stat-sub" id="factor-sub">—</div>
-          </aside>
-          <aside class="stat-card accent-blue" id="surplus-card" aria-live="polite">
-            <div class="stat-label">Surplus cumulé</div>
-            <div class="stat-value" id="surplus-value">—</div>
-            <div class="stat-sub" id="surplus-sub">—</div>
-          </aside>
+      <!-- Section Scénario (optionnelle) -->
+      <section class="card">
+        <div class="scenario-header">
+          <h2>Scénario de comparaison</h2>
+          <label class="toggle-label">
+            <input type="checkbox" id="enable-scenario" value="false">
+            <span class="toggle-slider"></span>
+            Activer le scénario
+          </label>
+        </div>
+        <div id="scenario-content" class="scenario-content" hidden>
+          <form id="scenario-form">
+            <div class="rows-header">
+              <div>Consommations du scénario</div>
+              <button type="button" id="add-scenario-row">Ajouter une ligne</button>
+            </div>
+            <div id="scenario-rows" class="rows"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Section Paramètres communs -->
+      <section class="card">
+        <h2>Paramètres de projection</h2>
+        <div class="grid">
+          <label>
+            Année de départ
+            <input id="start-year" name="startYear" type="number" min="2000" max="2100" value="2025" required />
+          </label>
+
+          <label>
+            Nombre d'années
+            <input id="years" name="years" type="number" min="1" max="50" value="10" required />
+          </label>
         </div>
 
-        <!-- Graphique en dessous -->
-        <div class="chart-wrapper" id="chart-wrapper">
-          <svg id="results-chart" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet"></svg>
-          <div id="chart-legend" class="chart-legend"></div>
+        <details class="mt">
+          <summary>Inflation par type d'énergie</summary>
+          <div class="grid mt">
+            <label>
+              Électricité (%/an)
+              <input id="esc-electricite" type="number" min="-50" max="100" step="0.1" placeholder="ex: 4" />
+            </label>
+            <label>
+              Gaz naturel (%/an)
+              <input id="esc-gaz" type="number" min="-50" max="100" step="0.1" placeholder="ex: 3" />
+            </label>
+            <label>
+              Fioul (%/an)
+              <input id="esc-fioul" type="number" min="-50" max="100" step="0.1" placeholder="ex: 3.5" />
+            </label>
+            <label>
+              Granulé (%/an)
+              <input id="esc-granule" type="number" min="-50" max="100" step="0.1" placeholder="ex: 2.5" />
+            </label>
+            <label>
+              Plaquette (%/an)
+              <input id="esc-plaquette" type="number" min="-50" max="100" step="0.1" placeholder="ex: 2" />
+            </label>
+            <label>
+              Propane (%/an)
+              <input id="esc-propane" type="number" min="-50" max="100" step="0.1" placeholder="ex: 3.2" />
+            </label>
+          </div>
+        </details>
+
+        <div class="actions">
+          <button type="button" id="calculate-all">Calculer l'évolution</button>
+          <button type="button" id="export-csv" disabled>Exporter CSV</button>
         </div>
+      </section>
+
+      <!-- Résultats pour Base uniquement -->
+      <section class="card" id="base-results-section" hidden>
+        <h2>Résultats - Scénario de base</h2>
+        
+        <!-- Indicateurs principaux -->
+        <div class="key-metrics">
+          <div class="key-metric primary">
+            <div class="metric-value" id="base-total-cost">—</div>
+            <div class="metric-label">Coût total sur la période</div>
+            <div class="metric-sub" id="base-annual-average">—</div>
+          </div>
+          <div class="key-metric">
+            <div class="metric-value" id="base-first-year">—</div>
+            <div class="metric-label">Première année</div>
+            <div class="metric-sub">Coût initial</div>
+          </div>
+          <div class="key-metric">
+            <div class="metric-value" id="base-last-year">—</div>
+            <div class="metric-label">Dernière année</div>
+            <div class="metric-sub" id="base-growth">—</div>
+          </div>
+          <div class="key-metric">
+            <div class="metric-value" id="base-cagr">—</div>
+            <div class="metric-label">inflation annuelle</div>
+          </div>
+        </div>
+
+        <!-- Graphique base -->
+        <div class="chart-wrapper">
+          <svg id="base-results-chart" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet"></svg>
+          <div id="base-chart-legend" class="chart-legend"></div>
+        </div>
+
         <div class="table-wrapper">
-          <table id="results-table">
+          <table id="base-results-table">
             <thead>
               <tr>
                 <th>Année</th>
-                <th>Facture totale (€)</th>
-                <th>Détail par ligne</th>
+                <th>Facture totale</th>
+                <th>Évolution</th>
+                <th>Détail par énergie</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Résultats avec Comparaison -->
+      <section class="card" id="comparison-results-section" hidden>
+        <h2>Comparaison des scénarios</h2>
+        
+        <!-- Indicateurs de comparaison -->
+        <div class="comparison-metrics">
+          <div class="comparison-metric base">
+            <div class="scenario-label">Scénario Base</div>
+            <div class="metric-value" id="comp-base-total">—</div>
+            <div class="metric-label">Coût total cumulé</div>
+            <div class="metric-details">
+              <div>Première année: <span id="comp-base-first">—</span></div>
+              <div>Dernière année: <span id="comp-base-last">—</span></div>
+              <div>inflation énrgétique annuelle: <span id="comp-base-cagr">—</span></div>
+            </div>
+          </div>
+          
+          <div class="comparison-metric scenario">
+            <div class="scenario-label">Scénario Alternatif</div>
+            <div class="metric-value" id="comp-scenario-total">—</div>
+            <div class="metric-label">Coût total cumulé</div>
+            <div class="metric-details">
+              <div>Première année: <span id="comp-scenario-first">—</span></div>
+              <div>Dernière année: <span id="comp-scenario-last">—</span></div>
+              <div>inflation énergétique annuelle: <span id="comp-scenario-cagr">—</span></div>
+            </div>
+          </div>
+          
+          <div class="comparison-metric difference">
+            <div class="scenario-label">Différence</div>
+            <div class="metric-value" id="comp-difference">—</div>
+            <div class="metric-label">Économie totale cumulée</div>
+            <div class="metric-details">
+              <div>Sur <span id="comp-years">—</span> ans</div>
+              <div id="comp-percentage">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Graphique combiné -->
+        <div class="combined-chart-container">
+          <h3>Évolution comparée des coûts</h3>
+          <div class="chart-wrapper">
+            <svg id="combined-results-chart" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet"></svg>
+            <div id="combined-chart-legend" class="chart-legend"></div>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="comparison-table">
+            <thead>
+              <tr>
+                <th>Année</th>
+                <th>Base</th>
+                <th>Alternatif</th>
+                <th>Économie</th>
+                <th>Détail base</th>
+                <th>Détail alternatif</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -122,6 +217,4 @@
 
     <script src="app.js"></script>
   </body>
-  </html>
-
-
+</html>
